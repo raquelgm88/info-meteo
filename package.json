@@ -1,6 +1,7 @@
 {
-  "name": "modulo-3-leccion-1-react-template",
+  "name": "react-starter-kit-raquelgm88",
   "version": "0.1.0",
+  "description": "React Starter Kit - raquelgm88",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
@@ -18,7 +19,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "githubpages": "rm -rf build && rm -rf docs && npm run build && mv build docs && git add docs/* && git commit -m \"Publish in GitHub Pages\" && git push"
   },
   "eslintConfig": {
     "extends": [
@@ -37,5 +39,7 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "author": "Raquel Gómez Munuera",
+  "license": "MIT"
 }
