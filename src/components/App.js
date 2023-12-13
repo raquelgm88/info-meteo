@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import callToApi from '../services/api';
 import '../styles/App.scss';
 import Header from './Header';
+import Filters from './Filters';
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
   return (
     <>
     <Header/>
+    <Filters/>
     </>
   );
 };
