@@ -3,15 +3,13 @@
 const URL_PROV = 'https://www.el-tiempo.net/api/json/v2/provincias'
 
 // Obtener provincias
-callToApi()
+// callToApi()
 
-// Obtener tiempo provincia
-callToApi(codProv)
+// // Obtener tiempo provincia
+// callToApi(codProv)
 
-// Obtener tiempo municipio
-callToApi(codProv, codMun)
-
-
+// // Obtener tiempo municipio
+// callToApi(codProv, codMun)
 
 
 const callToApi = (codProv = '', codMun = '') => {
@@ -21,12 +19,12 @@ const callToApi = (codProv = '', codMun = '') => {
     url = `${url}/${codProv}`;
     let urlMun = `${url}/municipios`;
 
-    const tiempoProv = fetch(url).then(response => response.json())
-    const listadoMun = fetch(urlMun).then(response => response.json())
+    const provWeather = fetch(url).then(response => response.json())
+    const munList = fetch(urlMun).then(response => response.json())
 
-    return Promise.all([tiempoProv, listadoMun]).then(results => {
+    return Promise.all([provWeather, munList]).then(results => {
       // aquí obtenemos un array con los resultados de cada promesa
-      const [resultProv, resultMun] = results
+      const [provResult, munResult] = results
       return results;
     })
 
