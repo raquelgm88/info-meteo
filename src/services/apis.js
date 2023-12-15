@@ -13,6 +13,7 @@ const URL_PROV = 'https://www.el-tiempo.net/api/json/v2/provincias'
 
 
 const callToApi = (codProv = '', codMun = '') => {
+  debugger;
   let url = URL_PROV;
 
  if(codProv !== '' && codMun === '') {
@@ -24,7 +25,7 @@ const callToApi = (codProv = '', codMun = '') => {
 
     return Promise.all([provWeather, munList]).then(results => {
       // aquí obtenemos un array con los resultados de cada promesa
-      const [provResult, munResult] = results
+      // const [provResult, munResult] = results
       return results;
     })
 
