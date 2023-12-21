@@ -13,7 +13,6 @@ const URL_PROV = 'https://www.el-tiempo.net/api/json/v2/provincias'
 
 
 const callToApi = (codProv = '', codMun = '') => {
-  debugger;
   let url = URL_PROV;
 
  if(codProv !== '' && codMun === '') {

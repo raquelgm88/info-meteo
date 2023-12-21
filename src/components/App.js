@@ -9,7 +9,8 @@ function App() {
 
   const [provData, setProvData] = useState([]);
   const [codProv, setCodProv] = useState([]);
-  const [provWeatherAndMunListData, setProvWeatherAndMunListData] = useState([]);
+  const [provWeather, setProvWeather] = useState([]);
+  const [munListData, setMunListData] = useState([]);
   // const [munWeatherData, setMunWeatherData] = useState({});
 
 
@@ -22,24 +23,42 @@ function App() {
     });
   }, []);
 
+  // Hacemos useEffect para poder detectar el cambio en el valor de la variable (provData), y ahí sí se ejecutaría la función.
+
   useEffect(() => {
     renderProvList();
   }, [provData]);
 
 
   useEffect(() => {
+    debugger;
     callToApi(codProv).then((response) => {
       // tengo que hacer función que me muestre el tiempo de provincia y lueo me pinte el select con el listado de los municipios. La función la hago fuera y aquí la ejecuto.
       // Ver función use call back.
-      renderMunList();
+
+      // const {municipios} = response[1];
+      // setMunListData(municipios);
+
+      setProvWeather(response[0]);
+      setMunListData(response[1]);
     });
   }, [codProv]);
 
   useEffect(() => {
-    callToApi(provWeatherAndMunListData).then((response) => {
-      setProvWeatherAndMunListData(response);
-    });
-  }, [codProv]);
+    debugger;
+    if(provWeather.length !== 0 && munListData.length !== 0) {
+      renderProvWeather(provWeather);
+      renderMunList(munListData);
+    };
+    
+  }, [codProv, provWeather, munListData]);
+
+
+  // useEffect(() => {
+  //   callToApi(provWeatherAndMunListData).then((response) => {
+  //     setProvWeatherAndMunListData(response);
+  //   });
+  // }, [codProv]);
 
   // FUNCIONES
 
@@ -53,6 +72,23 @@ function App() {
     }
   };
 
+  const renderProvWeather = () => {
+    const provWeatherContainer = document.querySelector('.js__prov-container');
+    const provWeatherInfo = 
+    `<h2 className='main__container--title'>${provWeather.title}</h2>
+    <div className='main__container--info'>
+      <div className='main__container--info_today'>
+        <h3 className='main__container--info_today-title'>Hoy</h3>
+        <p className='main__container--info_today-desc'>${provWeather.today.p}</p>
+      </div>
+      <div className='main__container--info_tomorrow'>
+        <h3 className='main__container--info_tomorrow-title'>Mañana</h3>
+        <p className='main__container--info_tomorrow-desc'>${provWeather.tomorrow.p}</p>
+      </div>
+    </div>`;
+    provWeatherContainer.innerHTML = provWeatherInfo;
+  };
+
   const renderMunList = () => {
     const munForm = document.querySelector('.js_mun');
     const label = `<label className="main__filter--label" htmlFor="mun">Selecciona un municipio</label>`;
@@ -60,12 +96,12 @@ function App() {
     </select>`;
     munForm.innerHTML = label + munSelect;
     
-    if(munSelect.innerHTML === '') {
-      for  (let mun of codProv) {
-        let  munOption = `<option className="main__filter--select_mun" value="${mun.CODIGOINE}">${mun.NOMBRE}</option>`;
-        munSelect.innerHTML += munOption;
-      };
-    }
+    // if(munSelect.innerHTML === '') {
+    //   for  (let mun of munListData) {
+    //     let  munOption = `<option className="main__filter--select_mun" value="${mun.CODIGOINE}">${mun.NOMBRE}</option>`;
+    //     munSelect.innerHTML += munOption;
+    //   };
+    // }
   };
 
   const handleProv = (ev) => {
@@ -86,20 +122,8 @@ function App() {
           </select>
         </form>
         <form className='main__filter js_mun'>
-
         </form>
-        <section className='main__container'>
-          <h2 className='main__container--title'>El tiempo en (PROVINCIA)</h2>
-          <div className='main__container--info'>
-            <div className='main__container--info_today'>
-              <h3 className='main__container--info_today-title'>Hoy</h3>
-              <p className='main__container--info_today-desc'>Descripción de hoy</p>
-            </div>
-            <div className='main__container--info_tomorrow'>
-              <h3 className='main__container--info_tomorrow-title'>Mañana</h3>
-              <p className='main__container--info_tomorrow-desc'>Descripción de mañana</p>
-            </div>
-          </div>
+        <section className='main__container js__prov-container'>
         </section>
       </main>
     </>
