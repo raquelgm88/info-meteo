@@ -31,11 +31,7 @@ function App() {
 
 
   useEffect(() => {
-    debugger;
     callToApi(codProv).then((response) => {
-      // tengo que hacer función que me muestre el tiempo de provincia y lueo me pinte el select con el listado de los municipios. La función la hago fuera y aquí la ejecuto.
-      // Ver función use call back.
-
       // const {municipios} = response[1];
       // setMunListData(municipios);
 
@@ -45,12 +41,10 @@ function App() {
   }, [codProv]);
 
   useEffect(() => {
-    debugger;
     if(provWeather.length !== 0 && munListData.length !== 0) {
       renderProvWeather(provWeather);
       renderMunList(munListData);
     };
-    
   }, [codProv, provWeather, munListData]);
 
 
@@ -95,13 +89,14 @@ function App() {
     const munSelect = `<select className="main__filter--select" name="mun" id="mun" onChange={handleMun} >
     </select>`;
     munForm.innerHTML = label + munSelect;
-    
-    // if(munSelect.innerHTML === '') {
-    //   for  (let mun of munListData) {
-    //     let  munOption = `<option className="main__filter--select_mun" value="${mun.CODIGOINE}">${mun.NOMBRE}</option>`;
-    //     munSelect.innerHTML += munOption;
-    //   };
-    // }
+
+    for (let mun of munListData) {
+      console.log(mun.NOMBRE);
+      // let codigoIne = mun.CODIGOINE;
+      // let valueMun = codigoIne.slice(0, -6);
+      // let  munOption = `<option className="main__filter--select_mun" value="${valueMun}">${mun.NOMBRE}</option>`;
+      // munSelect.innerHTML += munOption;
+    };
   };
 
   const handleProv = (ev) => {
