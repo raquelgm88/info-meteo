@@ -41,7 +41,9 @@ function App() {
   }, [codProv]);
 
   useEffect(() => {
-    if(provWeather.length !== 0 && munListData.length !== 0) {
+    debugger;
+    // if(provWeather.length !== 0 && munListData.length !== 0) {
+    if(provWeather?.title && munListData?.municipios) { 
       renderProvWeather(provWeather);
       renderMunList(munListData);
     };
@@ -83,25 +85,31 @@ function App() {
     provWeatherContainer.innerHTML = provWeatherInfo;
   };
 
+
+  
   const renderMunList = () => {
     const munForm = document.querySelector('.js_mun');
     const label = `<label className="main__filter--label" htmlFor="mun">Selecciona un municipio</label>`;
     const munSelect = `<select className="main__filter--select" name="mun" id="mun" onChange={handleMun} >
     </select>`;
     munForm.innerHTML = label + munSelect;
+    const selectMun = document.querySelector('#mun');
 
-    for (let mun of munListData) {
+    for (let mun of munListData?.municipios) {
       console.log(mun.NOMBRE);
+      console.log(mun.CODIGOINE.slice(0, -6));
+      let valueMun = mun.CODIGOINE.slice(0, -6);
       // let codigoIne = mun.CODIGOINE;
       // let valueMun = codigoIne.slice(0, -6);
-      // let  munOption = `<option className="main__filter--select_mun" value="${valueMun}">${mun.NOMBRE}</option>`;
-      // munSelect.innerHTML += munOption;
+      debugger;
+
+      let  munOption = `<option className="main__filter--select_mun" value="${valueMun}">${mun.NOMBRE}</option>`;
+      selectMun.innerHTML += munOption;
     };
   };
 
   const handleProv = (ev) => {
     setCodProv(ev.target.value);
-    renderMunList();
   };
 
 
