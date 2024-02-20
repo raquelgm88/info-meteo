@@ -11,7 +11,8 @@ function App() {
   const [codProv, setCodProv] = useState([]);
   const [provWeather, setProvWeather] = useState([]);
   const [munListData, setMunListData] = useState([]);
-  // const [munWeatherData, setMunWeatherData] = useState({});
+  const [codMun, setCodMun] = useState([]);
+  const [munWeather, setMunWeather] = useState({});
 
 
  // LLAMAR A LA API
@@ -41,13 +42,27 @@ function App() {
   }, [codProv]);
 
   useEffect(() => {
-    debugger;
     // if(provWeather.length !== 0 && munListData.length !== 0) {
     if(provWeather?.title && munListData?.municipios) { 
       renderProvWeather(provWeather);
       renderMunList(munListData);
     };
   }, [codProv, provWeather, munListData]);
+
+  useEffect(() => {
+    callToApi(codMun).then((response) => {
+      setMunWeather();
+    });
+  }, [codProv, codMun]);
+
+  // FALTA useEffect PARA EJECUTAR LA FUNCIÓN renderMunWeather
+
+  // useEffect(() => {
+  //   callToApi(munListData).then((response) => {
+  //     setMunWeatherData(response);
+  //   });
+  // }, [codProv, munListData]);
+
 
 
   // useEffect(() => {
@@ -69,7 +84,7 @@ function App() {
   };
 
   const renderProvWeather = () => {
-    const provWeatherContainer = document.querySelector('.js__prov-container');
+    const provWeatherContainer = document.querySelector('.js_prov-container');
     const provWeatherInfo = 
     `<h2 className='main__container--title'>${provWeather.title}</h2>
     <div className='main__container--info'>
@@ -84,25 +99,18 @@ function App() {
     </div>`;
     provWeatherContainer.innerHTML = provWeatherInfo;
   };
-
-
   
   const renderMunList = () => {
+    
     const munForm = document.querySelector('.js_mun');
     const label = `<label className="main__filter--label" htmlFor="mun">Selecciona un municipio</label>`;
-    const munSelect = `<select className="main__filter--select" name="mun" id="mun" onChange={handleMun} >
+    const munSelect = `<select className="main__filter--select" name="mun" id="mun" onChange={handleMun}>
     </select>`;
     munForm.innerHTML = label + munSelect;
     const selectMun = document.querySelector('#mun');
 
     for (let mun of munListData?.municipios) {
-      console.log(mun.NOMBRE);
-      console.log(mun.CODIGOINE.slice(0, -6));
       let valueMun = mun.CODIGOINE.slice(0, -6);
-      // let codigoIne = mun.CODIGOINE;
-      // let valueMun = codigoIne.slice(0, -6);
-      debugger;
-
       let  munOption = `<option className="main__filter--select_mun" value="${valueMun}">${mun.NOMBRE}</option>`;
       selectMun.innerHTML += munOption;
     };
@@ -110,6 +118,35 @@ function App() {
 
   const handleProv = (ev) => {
     setCodProv(ev.target.value);
+  };
+
+  // const handleMun = (ev) => {
+  //   setCodMun(ev.target.value);
+  // };
+
+  const renderMunWeather = () => {
+    const munWeatherContainer = document.querySelector('.js_mun-container');
+    const munWeatherInfo = 
+    `<h2 className='main__container--title'>${munWeather.metadescripcion}</h2>
+    <div className='main__container-mun--info'>
+      <div className='main__container-mun--info_
+      temperature'>
+        <img className='main__container-mun--info_temperature-
+        img' src="" alt="" />
+        <p className='main__container-mun--info_temperature-
+        degrees'>${munWeather.temperatura_actual} ºC</p>
+      </div>
+      <div className='main__container-mun--info_maxMin'>
+        <p className='main__container-mun--info_maxMin---max'>${munWeather.temperaturas.max} ºC</p>
+        <p className='main__container-mun--info_maxMin---min'>${munWeather.temperaturas.min} ºC</p>
+      </div>
+      <div className='main__container-mun--info_others'>
+        <p className='main__container-mun--info_others---precipitation'>${munWeather.precipitacion}%</p>
+        <p className='main__container-mun--info_others---humidity'>${munWeather.humedad}%</p>
+        <p className='main__container-mun--info_others---wind'>${munWeather.viento} km/h</p>
+      </div>
+    </div>`;
+    munWeatherContainer.innerHTML = munWeatherInfo;
   };
 
 
@@ -126,8 +163,9 @@ function App() {
         </form>
         <form className='main__filter js_mun'>
         </form>
-        <section className='main__container js__prov-container'>
+        <section className='main__container js_prov-container'>
         </section>
+        <section className='main__container-mun js_mun-container'></section>
       </main>
     </>
   );
