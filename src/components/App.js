@@ -12,7 +12,7 @@ function App() {
   const [provWeather, setProvWeather] = useState([]);
   const [munListData, setMunListData] = useState([]);
   const [codMun, setCodMun] = useState([]);
-  const [munWeather, setMunWeather] = useState({});
+  const [munWeather, setMunWeather] = useState([]);
 
 
  // LLAMAR A LA API
@@ -42,34 +42,24 @@ function App() {
   }, [codProv]);
 
   useEffect(() => {
-    // if(provWeather.length !== 0 && munListData.length !== 0) {
-    if(provWeather?.title && munListData?.municipios) { 
+    if(provWeather?.title && munListData?.municipios) {
       renderProvWeather(provWeather);
       renderMunList(munListData);
     };
   }, [codProv, provWeather, munListData]);
 
   useEffect(() => {
-    callToApi(codMun).then((response) => {
-      setMunWeather();
+    callToApi(codProv, codMun).then((response) => {
+      setMunWeather(response);
     });
-  }, [codProv, codMun]);
+  }, [codProv, munListData, codMun]);
 
-  // FALTA useEffect PARA EJECUTAR LA FUNCIÓN renderMunWeather
+  useEffect(() => {
+    if(munListData?.municipios && codMun){
+      renderMunWeather(munWeather);
+    }
+  }, [codMun]);
 
-  // useEffect(() => {
-  //   callToApi(munListData).then((response) => {
-  //     setMunWeatherData(response);
-  //   });
-  // }, [codProv, munListData]);
-
-
-
-  // useEffect(() => {
-  //   callToApi(provWeatherAndMunListData).then((response) => {
-  //     setProvWeatherAndMunListData(response);
-  //   });
-  // }, [codProv]);
 
   // FUNCIONES
 
@@ -102,11 +92,12 @@ function App() {
   
   const renderMunList = () => {
     
-    const munForm = document.querySelector('.js_mun');
-    const label = `<label className="main__filter--label" htmlFor="mun">Selecciona un municipio</label>`;
-    const munSelect = `<select className="main__filter--select" name="mun" id="mun" onChange={handleMun}>
-    </select>`;
-    munForm.innerHTML = label + munSelect;
+
+    // const munForm = document.querySelector('.js_mun');
+    // const label = `<label className="main__filter--label" htmlFor="mun">Selecciona un municipio</label>`;
+    // const munSelect = `<select className="main__filter--select" name="mun" id="mun" onChange={${handleMun}}>
+    // </select>`;
+    // munForm.innerHTML = label + munSelect;
     const selectMun = document.querySelector('#mun');
 
     for (let mun of munListData?.municipios) {
@@ -120,9 +111,9 @@ function App() {
     setCodProv(ev.target.value);
   };
 
-  // const handleMun = (ev) => {
-  //   setCodMun(ev.target.value);
-  // };
+  const handleMun = (ev) => {
+    setCodMun(ev.target.value);
+  };
 
   const renderMunWeather = () => {
     const munWeatherContainer = document.querySelector('.js_mun-container');
@@ -134,21 +125,26 @@ function App() {
         <img className='main__container-mun--info_temperature-
         img' src="" alt="" />
         <p className='main__container-mun--info_temperature-
-        degrees'>${munWeather.temperatura_actual} ºC</p>
+        degrees'>Temperatura actual: ${munWeather.temperatura_actual} ºC</p>
       </div>
       <div className='main__container-mun--info_maxMin'>
-        <p className='main__container-mun--info_maxMin---max'>${munWeather.temperaturas.max} ºC</p>
-        <p className='main__container-mun--info_maxMin---min'>${munWeather.temperaturas.min} ºC</p>
+        
+        
       </div>
       <div className='main__container-mun--info_others'>
-        <p className='main__container-mun--info_others---precipitation'>${munWeather.precipitacion}%</p>
-        <p className='main__container-mun--info_others---humidity'>${munWeather.humedad}%</p>
-        <p className='main__container-mun--info_others---wind'>${munWeather.viento} km/h</p>
+        <p className='main__container-mun--info_others---precipitation'>Precipitación: ${munWeather.precipitacion}%</p>
+        <p className='main__container-mun--info_others---humidity'>Humedad: ${munWeather.humedad}%</p>
+        <p className='main__container-mun--info_others---wind'>Viento: ${munWeather.viento} km/h</p>
       </div>
     </div>`;
     munWeatherContainer.innerHTML = munWeatherInfo;
+
+    console.log(munWeather.metadescripcion);
   };
 
+{/* <p className='main__container-mun--info_maxMin---maxi'>Temperatura máxima hoy: ${munWeather.temperaturas.max} ºC</p> */}
+
+{/* <p className='main__container-mun--info_maxMin---min'>Temperatura mínima hoy: ${munWeather.temperaturas.min} ºC</p> */}
 
   return (
     <>
@@ -162,6 +158,9 @@ function App() {
           </select>
         </form>
         <form className='main__filter js_mun'>
+          <label className="main__filter--label" htmlFor="mun">Selecciona un municipio</label>
+          <select className="main__filter--select" name="mun" id="mun" onChange={handleMun}>
+          </select>`;
         </form>
         <section className='main__container js_prov-container'>
         </section>
