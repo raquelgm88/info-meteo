@@ -65,7 +65,8 @@ function App() {
 
   const renderProvList = () => {
     const provSelect = document.querySelector('.main__filter--select');
-    if(provSelect.innerHTML === '') {
+    const optionProv = document.querySelector('.js_option-prov');
+    if(optionProv) {
       for  (let prov of provData) {
         let  provOption = `<option className="main__filter--select_prov" value="${prov.CODPROV}">${prov.NOMBRE_PROVINCIA}</option>`;
         provSelect.innerHTML += provOption;
@@ -133,6 +134,10 @@ function App() {
     console.log(munWeather.temperaturas);
   };
 
+  // DESARROLLAR FUNCIÓN PARA BORRAR EL HTML DEL TIEMPO DE LA PROVINCIA QUE ESTABA SELECCIONADA
+  // const deleteProvWeather = () => {
+
+  // };
 
 {/* <p className='main__container-mun--info_maxMin---maxi'>Temperatura máxima hoy: ${munWeather?.temperaturas.max} ºC</p> */}
 {/* <p className='main__container-mun--info_maxMin---min'>Temperatura mínima hoy: ${munWeather.temperaturas.min} ºC</p> */}
@@ -146,6 +151,13 @@ function App() {
     setCodMun(ev.target.value);
   };
 
+  const handleOptionProv = (ev) => {
+    setProvWeather([]);
+    setMunListData([]);
+    setCodMun([]);
+    setMunWeather([]);
+  };
+
   
   return (
     <>
@@ -156,11 +168,13 @@ function App() {
         <form className="main__filter">
           <label className="main__filter--label" htmlFor="prov">Selecciona una provincia</label>
           <select className="main__filter--select" name="prov" id="prov" onChange={handleProv} >
+            <option className="main__filter--select_prov js_option-prov" value="" onChange={handleOptionProv}>PROVINCIAS</option>
           </select>
         </form>
         <form className='main__filter js_mun'>
           <label className="main__filter--label" htmlFor="mun">Selecciona un municipio</label>
           <select className="main__filter--select" name="mun" id="mun" onChange={handleMun}>
+            <option className="main__filter--select_mun" value="">MUNICIPIOS</option>
           </select>
         </form>
         <section className='main__container js_prov-container'>
