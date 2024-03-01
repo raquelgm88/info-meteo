@@ -58,7 +58,7 @@ function App() {
     if(munListData?.municipios && codMun){
       renderMunWeather(munWeather);
     }
-  }, [codMun]);
+  }, [codMun, munWeather]);
 
 
   // FUNCIONES
@@ -107,14 +107,6 @@ function App() {
     };
   };
 
-  const handleProv = (ev) => {
-    setCodProv(ev.target.value);
-  };
-
-  const handleMun = (ev) => {
-    setCodMun(ev.target.value);
-  };
-
   const renderMunWeather = () => {
     const munWeatherContainer = document.querySelector('.js_mun-container');
     const munWeatherInfo = 
@@ -128,8 +120,7 @@ function App() {
         degrees'>Temperatura actual: ${munWeather.temperatura_actual} ºC</p>
       </div>
       <div className='main__container-mun--info_maxMin'>
-        
-        
+       
       </div>
       <div className='main__container-mun--info_others'>
         <p className='main__container-mun--info_others---precipitation'>Precipitación: ${munWeather.precipitacion}%</p>
@@ -139,13 +130,23 @@ function App() {
     </div>`;
     munWeatherContainer.innerHTML = munWeatherInfo;
 
-    console.log(munWeather.metadescripcion);
+    console.log(munWeather.temperaturas);
   };
 
-{/* <p className='main__container-mun--info_maxMin---maxi'>Temperatura máxima hoy: ${munWeather.temperaturas.max} ºC</p> */}
 
+{/* <p className='main__container-mun--info_maxMin---maxi'>Temperatura máxima hoy: ${munWeather?.temperaturas.max} ºC</p> */}
 {/* <p className='main__container-mun--info_maxMin---min'>Temperatura mínima hoy: ${munWeather.temperaturas.min} ºC</p> */}
 
+
+  const handleProv = (ev) => {
+    setCodProv(ev.target.value);
+  };
+
+  const handleMun = (ev) => {
+    setCodMun(ev.target.value);
+  };
+
+  
   return (
     <>
       <header className="header">
@@ -160,7 +161,7 @@ function App() {
         <form className='main__filter js_mun'>
           <label className="main__filter--label" htmlFor="mun">Selecciona un municipio</label>
           <select className="main__filter--select" name="mun" id="mun" onChange={handleMun}>
-          </select>`;
+          </select>
         </form>
         <section className='main__container js_prov-container'>
         </section>
