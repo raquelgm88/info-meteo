@@ -48,10 +48,6 @@ function App() {
     };
   }, [codProv, provWeather, munListData]);
 
-  // useEffect(() => {
-  //   renderMunList(munListData);
-  // }, [codProv, munListData]);
-
   useEffect(() => {
     callToApi(codProv, codMun).then((response) => {
       setMunWeather(response);
@@ -102,7 +98,8 @@ function App() {
     // </select>`;
     // munForm.innerHTML = label + munSelect;
     const selectMun = document.querySelector('#mun');
-
+    selectMun.innerHTML = '<option className="main__filter--select_mun" value="">MUNICIPIOS</option>';
+debugger;
     for (let mun of munListData?.municipios) {
       let valueMun = mun.CODIGOINE.slice(0, -6);
       let  munOption = `<option className="main__filter--select_mun" value="${valueMun}">${mun.NOMBRE}</option>`;
@@ -157,18 +154,13 @@ function App() {
     setCodMun([]);
     setMunWeather([]);
   };
-  
- 
-
 
   const handleProv = (ev) => {
     if(!ev.target.value) {
       resetAll();
     }else{
       setCodProv(ev.target.value);
-      deleteMunWeather(); 
-      setCodMun([]);
-      setMunWeather([]);
+      deleteMunWeather();
     }
   };
 
@@ -200,6 +192,11 @@ function App() {
         </section>
         <section className='main__container-mun js_mun-container'></section>
       </main>
+      <footer>
+        <div>
+          <p></p>
+        </div>
+      </footer>
     </>
   );
 };
