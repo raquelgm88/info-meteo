@@ -35,9 +35,9 @@ function App() {
     callToApi(codProv).then((response) => {
       // const {municipios} = response[1];
       // setMunListData(municipios);
-
       setProvWeather(response[0]);
       setMunListData(response[1]);
+
     });
   }, [codProv]);
 
@@ -47,6 +47,10 @@ function App() {
       renderMunList(munListData);
     };
   }, [codProv, provWeather, munListData]);
+
+  // useEffect(() => {
+  //   renderMunList(munListData);
+  // }, [codProv, munListData]);
 
   useEffect(() => {
     callToApi(codProv, codMun).then((response) => {
@@ -92,8 +96,6 @@ function App() {
   };
   
   const renderMunList = () => {
-    
-
     // const munForm = document.querySelector('.js_mun');
     // const label = `<label className="main__filter--label" htmlFor="mun">Selecciona un municipio</label>`;
     // const munSelect = `<select className="main__filter--select" name="mun" id="mun" onChange={${handleMun}}>
@@ -121,7 +123,8 @@ function App() {
         degrees'>Temperatura actual: ${munWeather.temperatura_actual} ºC</p>
       </div>
       <div className='main__container-mun--info_maxMin'>
-       
+        <p className='main__container-mun--info_maxMin---maxi'>Temperatura máxima hoy: ${munWeather.temperaturas?.max} ºC</p>
+        <p className='main__container-mun--info_maxMin---min'>Temperatura mínima hoy: ${munWeather.temperaturas?.min} ºC</p>
       </div>
       <div className='main__container-mun--info_others'>
         <p className='main__container-mun--info_others---precipitation'>Precipitación: ${munWeather.precipitacion}%</p>
@@ -130,33 +133,49 @@ function App() {
       </div>
     </div>`;
     munWeatherContainer.innerHTML = munWeatherInfo;
-
-    console.log(munWeather.temperaturas);
   };
 
-  // DESARROLLAR FUNCIÓN PARA BORRAR EL HTML DEL TIEMPO DE LA PROVINCIA QUE ESTABA SELECCIONADA
-  // const deleteProvWeather = () => {
 
-  // };
+  const deleteProvWeather = () => {
+    document.querySelector('.js_prov-container').innerHTML = '';
+  };
 
-{/* <p className='main__container-mun--info_maxMin---maxi'>Temperatura máxima hoy: ${munWeather?.temperaturas.max} ºC</p> */}
-{/* <p className='main__container-mun--info_maxMin---min'>Temperatura mínima hoy: ${munWeather.temperaturas.min} ºC</p> */}
+   const deleteMunList = () => {
+    document.querySelector('#mun').innerHTML = '';
+  };
+
+  const deleteMunWeather = () =>  {
+    document.querySelector('.js_mun-container').innerHTML = '';
+  };
+
+  const resetAll = () => {
+    deleteProvWeather();
+    deleteMunList();
+    deleteMunWeather();
+    setProvWeather([]);
+    setMunListData([]);
+    setCodMun([]);
+    setMunWeather([]);
+  };
+  
+ 
 
 
   const handleProv = (ev) => {
-    setCodProv(ev.target.value);
+    if(!ev.target.value) {
+      resetAll();
+    }else{
+      setCodProv(ev.target.value);
+      deleteMunWeather(); 
+      setCodMun([]);
+      setMunWeather([]);
+    }
   };
 
   const handleMun = (ev) => {
     setCodMun(ev.target.value);
   };
 
-  const handleOptionProv = (ev) => {
-    setProvWeather([]);
-    setMunListData([]);
-    setCodMun([]);
-    setMunWeather([]);
-  };
 
   
   return (
@@ -168,7 +187,7 @@ function App() {
         <form className="main__filter">
           <label className="main__filter--label" htmlFor="prov">Selecciona una provincia</label>
           <select className="main__filter--select" name="prov" id="prov" onChange={handleProv} >
-            <option className="main__filter--select_prov js_option-prov" value="" onChange={handleOptionProv}>PROVINCIAS</option>
+            <option className="main__filter--select_prov js_option-prov" value="">PROVINCIAS</option>
           </select>
         </form>
         <form className='main__filter js_mun'>
