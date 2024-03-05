@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import callToApi from '../services/apis';
 import '../styles/App.scss';
+import { Route, Routes } from "react-router-dom";
 
 
 function App() {
@@ -99,7 +100,7 @@ function App() {
     // munForm.innerHTML = label + munSelect;
     const selectMun = document.querySelector('#mun');
     selectMun.innerHTML = '<option className="main__filter--select_mun" value="">MUNICIPIOS</option>';
-debugger;
+
     for (let mun of munListData?.municipios) {
       let valueMun = mun.CODIGOINE.slice(0, -6);
       let  munOption = `<option className="main__filter--select_mun" value="${valueMun}">${mun.NOMBRE}</option>`;
@@ -194,7 +195,7 @@ debugger;
       </main>
       <footer>
         <div>
-          <p></p>
+          <small>Información meteorológica: https://www.el-tiempo.net/api</small>
         </div>
       </footer>
     </>
